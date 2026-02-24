@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitTrack Pro · Gym planner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      transition: background-color 0.3s, color 0.2s;
+      scroll-behavior: smooth;
+    }
+
+    body.light-mode {
+      background: linear-gradient(145deg, #f3f5f9 0%, #eef0f5 100%);
+      color: #1e1e2f;
+    }
+
+    body.dark-mode {
+      background: linear-gradient(145deg, #12121c 0%, #1b1b2c 100%);
+      color: #ececf0;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .dark-mode .glass {
+      background: rgba(20, 20, 30, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .site-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 20px;
+      z-index: 100;
+      border-radius: 60px;
+      padding: 12px 28px;
+      margin: 20px 0 30px;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(130deg, #4f46e5, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 38px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: inherit;
+      opacity: 0.8;
+      transition: 0.2s;
+      font-size: 1rem;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a.active-link::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #a855f7);
+      border-radius: 4px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: inherit;
+      transition: 0.2s;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    .section {
+      padding: 60px 0 40px;
+      scroll-margin-top: 90px;
+    }
+
+    .hero-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 48px 56px;
+      border-radius: 48px;
+    }
+
+    .gradient-heading {
+      font-size: 4.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(125deg, #1e2b5e, #7c3aed, #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 24px;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      max-width: 450px;
+      margin-bottom: 32px;
+      opacity: 0.8;
+    }
+
+    .hero-visual i {
+      font-size: 10rem;
+      background: linear-gradient(45deg, #4f46e5, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(95deg, #4f46e5, #a855f7);
+      border: none;
+      padding: 16px 38px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 18px 30px -10px #7c3aed80;
+      transition: 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 22px 35px -8px #9333ea;
+    }
+
+    .section-title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gradient-bg-text {
+      background: linear-gradient(120deg, #2563eb, #c026d3);
+      padding: 8px 24px;
+      border-radius: 60px;
+      color: white;
+      font-size: 1.6rem;
+    }
+
+    .card {
+      padding: 32px;
+      border-radius: 36px;
+    }
+
+    .card-large {
+      padding: 32px;
+      border-radius: 48px;
+    }
+
+    .planner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .day-selector {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .day-chip {
+      padding: 12px 28px;
+      border-radius: 40px;
+      background: rgba(255,255,255,0.2);
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .day-chip.active-day {
+      background: linear-gradient(145deg, #4f46e5, #9333ea);
+      color: white;
+      border-color: white;
+    }
+
+    .btn-add-day {
+      background: rgba(255,255,255,0.2);
+      border: 2px dashed #a78bfa;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      color: inherit;
+    }
+
+    .workout-day-panel {
+      margin-top: 20px;
+    }
+
+    .exercise-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 22px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 100px;
+      margin: 12px 0;
+      transition: 0.15s;
+    }
+
+    .exercise-item:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .exercise-name {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .delete-exercise {
+      background: transparent;
+      border: none;
+      color: #f87171;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .add-exercise-form {
+      display: flex;
+      gap: 12px;
+      margin: 25px 0 10px;
+    }
+
+    .add-exercise-form input {
+      flex: 1;
+      padding: 16px 24px;
+      border-radius: 60px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: inherit;
+      font-size: 1rem;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 16px 22px;
+      border-radius: 40px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: inherit;
+      font-size: 1.1rem;
+    }
+
+    .result-display {
+      font-size: 2.8rem;
+      font-weight: 800;
+      text-align: center;
+      margin: 20px 0 10px;
+      background: linear-gradient(145deg, #4f46e5, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .bmi-category {
+      font-size: 1.4rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 30px 0;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      display: block;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    .stat-value {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(145deg, #2563eb, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 14px 30px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      color: inherit;
+      width: 100%;
+    }
+
+    .about-card {
+      text-align: center;
+      padding: 48px;
+    }
+
+    .about-icon {
+      font-size: 4rem;
+      background: linear-gradient(145deg, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 24px;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .tech-stack span {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 22px;
+      border-radius: 60px;
+      font-weight: 600;
+    }
+
+    .footer {
+      border-radius: 60px 60px 20px 20px;
+      padding: 32px 40px;
+      margin: 40px 0 30px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .social-icons i {
+      font-size: 1.7rem;
+      margin-left: 20px;
+      opacity: 0.7;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .social-icons i:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .hero-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 36px 24px;
+      }
+      .gradient-heading {
+        font-size: 3rem;
+      }
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body class="light-mode">
+  <div class="site-wrapper">
+    <nav class="navbar glass">
+      <div class="nav-container">
+        <div class="logo"><i class="fas fa-dumbbell"></i> FitTrack Pro</div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home" class="nav-link active-link">Home</a></li>
+          <li><a href="#planner" class="nav-link">Planner</a></li>
+          <li><a href="#bmi" class="nav-link">BMI</a></li>
+          <li><a href="#calorie" class="nav-link">Calorie</a></li>
+          <li><a href="#progress" class="nav-link">Progress</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+        </ul>
+        <div class="nav-right">
+          <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+          <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section id="home" class="section hero-section">
+        <div class="hero glass hero-card">
+          <div class="hero-text">
+            <h1 class="gradient-heading">sculpt your <br>stronger self</h1>
+            <p>Intelligent workout planner & tracking — built for consistency.</p>
+            <a href="#planner" class="btn-primary"><i class="fas fa-bolt"></i> start planning</a>
+          </div>
+          <div class="hero-visual">
+            <i class="fas fa-person-running"></i>
+          </div>
+        </div>
+      </section>
+
+      <section id="planner" class="section">
+        <h2 class="section-title"><span class="gradient-bg-text">workout planner</span> <i class="fas fa-calendar-alt"></i></h2>
+        <div class="planner-grid">
+          <div class="glass card-large" id="plannerContainer">
+            <div class="planner-header">
+              <div class="day-selector" id="daySelector"></div>
+              <button class="btn-add-day" id="addDayBtn"><i class="fas fa-plus"></i> new day</button>
+            </div>
+            <div id="workoutDaysContainer"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="bmi" class="section">
+        <h2 class="section-title"><span class="gradient-bg-text">bmi calculator</span> <i class="fas fa-calculator"></i></h2>
+        <div class="calculator-grid">
+          <div class="glass card">
+            <div class="input-group">
+              <label><i class="fas fa-ruler"></i> height (cm)</label>
+              <input type="number" id="heightCm" placeholder="180" value="180">
+            </div>
+            <div class="input-group">
+              <label><i class="fas fa-weight-scale"></i> weight (kg)</label>
+              <input type="number" id="weightKg" placeholder="75" value="75">
+            </div>
+            <button class="btn-primary" id="calcBmiBtn">calculate BMI</button>
+            <div class="result-display" id="bmiResult">— kg/m²</div>
+            <div class="bmi-category" id="bmiCategory"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="calorie" class="section">
+        <h2 class="section-title"><span class="gradient-bg-text">calorie calculator</span> <i class="fas fa-fire"></i></h2>
+        <div class="calculator-grid">
+          <div class="glass card">
+            <div class="input-group">
+              <label><i class="fas fa-venus-mars"></i> gender</label>
+              <select id="genderSelect">
+                <option value="male">male</option>
+                <option value="female">female</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label><i class="fas fa-ruler"></i> height (cm)</label>
+              <input type="number" id="calHeight" placeholder="170" value="170">
+            </div>
+            <div class="input-group">
+              <label><i class="fas fa-weight-scale"></i> weight (kg)</label>
+              <input type="number" id="calWeight" placeholder="70" value="70">
+            </div>
+            <div class="input-group">
+              <label><i class="fas fa-calendar"></i> age</label>
+              <input type="number" id="calAge" placeholder="25" value="25">
+            </div>
+            <button class="btn-primary" id="calcCalBtn">estimate calories</button>
+            <div class="result-display" id="calorieResult">— kcal/day</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="progress" class="section">
+        <h2 class="section-title"><span class="gradient-bg-text">progress tracker</span> <i class="fas fa-chart-line"></i></h2>
+        <div class="progress-grid">
+          <div class="glass card" id="progressCard">
+            <div class="progress-stats">
+              <div class="stat-item">
+                <span class="stat-label">workouts this week</span>
+                <span class="stat-value" id="weeklyWorkouts">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">total exercises</span>
+                <span class="stat-value" id="totalExercises">0</span>
+              </div>
+            </div>
+            <button class="btn-secondary" id="resetProgressBtn"><i class="fas fa-rotate-left"></i> reset data</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <h2 class="section-title"><span class="gradient-bg-text">about</span> <i class="fas fa-address-card"></i></h2>
+        <div class="about-grid">
+          <div class="glass card about-card">
+            <i class="fas fa-dumbbell about-icon"></i>
+            <h3>FitTrack Pro</h3>
+            <p>Designed as a 3rd year CS project — modern UX, local storage persistence, 6‑day split planner, and live metrics. No frameworks, just vanilla elegance.</p>
+            <div class="tech-stack">
+              <span>HTML5</span><span>CSS3</span><span>ES6</span><span>localStorage</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="glass footer">
+      <div class="footer-content">
+        <p><i class="far fa-copyright"></i> FitTrack Pro — gym planner. all rights reserved.</p>
+        <div class="social-icons">
+          <i class="fab fa-github"></i>
+          <i class="fab fa-linkedin"></i>
+          <i class="fab fa-x-twitter"></i>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      const state = {
+        days: ['Push', 'Pull', 'Legs', 'Upper', 'Lower', 'Cardio'],
+        activeDayIndex: 0,
+        workouts: {},
+        theme: 'light'
+      };
+
+      const dom = {
+        daySelector: document.getElementById('daySelector'),
+        workoutDaysContainer: document.getElementById('workoutDaysContainer'),
+        addDayBtn: document.getElementById('addDayBtn'),
+        themeToggle: document.getElementById('themeToggle'),
+        hamburger: document.getElementById('hamburger'),
+        navLinks: document.getElementById('navLinks'),
+        navLinkItems: document.querySelectorAll('.nav-link'),
+        heightCm: document.getElementById('heightCm'),
+        weightKg: document.getElementById('weightKg'),
+        calcBmiBtn: document.getElementById('calcBmiBtn'),
+        bmiResult: document.getElementById('bmiResult'),
+        bmiCategory: document.getElementById('bmiCategory'),
+        genderSelect: document.getElementById('genderSelect'),
+        calHeight: document.getElementById('calHeight'),
+        calWeight: document.getElementById('calWeight'),
+        calAge: document.getElementById('calAge'),
+        calcCalBtn: document.getElementById('calcCalBtn'),
+        calorieResult: document.getElementById('calorieResult'),
+        weeklyWorkouts: document.getElementById('weeklyWorkouts'),
+        totalExercises: document.getElementById('totalExercises'),
+        resetProgressBtn: document.getElementById('resetProgressBtn')
+      };
+
+      function loadFromStorage() {
+        const saved = localStorage.getItem('fittrack_workouts');
+        if (saved) {
+          try {
+            state.workouts = JSON.parse(saved);
+          } catch { 
+            state.workouts = {}; 
+          }
+        }
+        
+        const savedTheme = localStorage.getItem('fittrack_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          state.theme = savedTheme;
+          document.body.className = savedTheme + '-mode';
+          dom.themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+      }
+
+      function saveWorkouts() {
+        localStorage.setItem('fittrack_workouts', JSON.stringify(state.workouts));
+        updateProgressStats();
+      }
+
+      function renderDayChips() {
+        dom.daySelector.innerHTML = '';
+        state.days.forEach((day, idx) => {
+          const chip = document.createElement('span');
+          chip.className = `day-chip ${idx === state.activeDayIndex ? 'active-day' : ''}`;
+          chip.textContent = day;
+          chip.addEventListener('click', function(e) {
+            state.activeDayIndex = parseInt(e.currentTarget.dataset.index);
+            renderDayChips();
+            renderWorkoutPanel();
+          });
+          chip.dataset.index = idx;
+          dom.daySelector.appendChild(chip);
+        });
+      }
+
+      function renderWorkoutPanel() {
+        const activeDay = state.days[state.activeDayIndex];
+        if (!state.workouts[activeDay]) {
+          state.workouts[activeDay] = [];
+        }
+        const exercises = state.workouts[activeDay];
+
+        let html = `<div class="workout-day-panel"><h3>${activeDay} exercises</h3>`;
+        
+        if (exercises.length === 0) {
+          html += `<p style="opacity:0.6; margin:20px 0;">No exercises added yet</p>`;
+        } else {
+          exercises.forEach((ex, i) => {
+            html += `<div class="exercise-item"><span class="exercise-name">${ex}</span><button class="delete-exercise" data-day="${activeDay}" data-index="${i}"><i class="fas fa-trash"></i></button></div>`;
+          });
+        }
+        
+        html += `<div class="add-exercise-form"><input type="text" id="newExInput" placeholder="e.g. Bench press"><button class="btn-primary" id="addExBtn"><i class="fas fa-plus"></i> add</button></div></div>`;
+        dom.workoutDaysContainer.innerHTML = html;
+
+        document.querySelectorAll('.delete-exercise').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const day = this.dataset.day;
+            const idx = parseInt(this.dataset.index);
+            if (state.workouts[day] && state.workouts[day][idx]) {
+              state.workouts[day].splice(idx, 1);
+              if (state.workouts[day].length === 0) {
+                delete state.workouts[day];
+              }
+              saveWorkouts();
+              renderWorkoutPanel();
+            }
+          });
+        });
+
+        const addBtn = document.getElementById('addExBtn');
+        if (addBtn) {
+          addBtn.addEventListener('click', function() {
+            const input = document.getElementById('newExInput');
+            const val = input.value.trim();
+            if (val) {
+              const day = state.days[state.activeDayIndex];
+              if (!state.workouts[day]) {
+                state.workouts[day] = [];
+              }
+              state.workouts[day].push(val);
+              saveWorkouts();
+              renderWorkoutPanel();
+            }
+          });
+        }
+      }
+
+      function updateProgressStats() {
+        const totalEx = Object.values(state.workouts).flat().length;
+        const uniqueDays = Object.keys(state.workouts).length;
+        dom.totalExercises.textContent = totalEx;
+        dom.weeklyWorkouts.textContent = uniqueDays;
+      }
+
+      dom.addDayBtn.addEventListener('click', function() {
+        const newName = prompt('New workout day name (e.g. Arms)');
+        if (newName && newName.trim()) {
+          const trimmed = newName.trim();
+          if (!state.days.includes(trimmed)) {
+            state.days.push(trimmed);
+            state.activeDayIndex = state.days.length - 1;
+            renderDayChips();
+            renderWorkoutPanel();
+          } else {
+            alert('Day already exists');
+          }
+        }
+      });
+
+      dom.calcBmiBtn.addEventListener('click', function() {
+        const h = parseFloat(dom.heightCm.value) / 100;
+        const w = parseFloat(dom.weightKg.value);
+        if (h > 0 && w > 0) {
+          const bmi = (w / (h * h)).toFixed(1);
+          dom.bmiResult.textContent = `${bmi} kg/m²`;
+          let cat = '';
+          if (bmi < 18.5) cat = 'underweight';
+          else if (bmi < 25) cat = 'normal weight';
+          else if (bmi < 30) cat = 'overweight';
+          else cat = 'obese';
+          dom.bmiCategory.textContent = `category: ${cat}`;
+        } else {
+          alert('Please enter valid height and weight');
+        }
+      });
+
+      dom.calcCalBtn.addEventListener('click', function() {
+        const gender = dom.genderSelect.value;
+        const h = parseFloat(dom.calHeight.value);
+        const w = parseFloat(dom.calWeight.value);
+        const age = parseFloat(dom.calAge.value);
+        
+        if (h && w && age && h > 0 && w > 0 && age > 0) {
+          let bmr;
+          if (gender === 'male') {
+            bmr = 10 * w + 6.25 * h - 5 * age + 5;
+          } else {
+            bmr = 10 * w + 6.25 * h - 5 * age - 161;
+          }
+          dom.calorieResult.textContent = `${Math.round(bmr)} kcal/day`;
+        } else {
+          alert('Please enter valid values');
+        }
+      });
+
+      dom.resetProgressBtn.addEventListener('click', function() {
+        if (confirm('Reset all workout data?')) {
+          state.workouts = {};
+          localStorage.removeItem('fittrack_workouts');
+          renderWorkoutPanel();
+          updateProgressStats();
+        }
+      });
+
+      dom.themeToggle.addEventListener('click', function() {
+        const isDark = document.body.className.includes('dark');
+        document.body.className = isDark ? 'light-mode' : 'dark-mode';
+        state.theme = isDark ? 'light' : 'dark';
+        localStorage.setItem('fittrack_theme', state.theme);
+        dom.themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+      });
+
+      dom.hamburger.addEventListener('click', function() {
+        if (dom.navLinks.style.display === 'flex') {
+          dom.navLinks.style.display = '';
+        } else {
+          dom.navLinks.style.display = 'flex';
+          dom.navLinks.style.flexDirection = 'column';
+          dom.navLinks.style.position = 'absolute';
+          dom.navLinks.style.top = '80px';
+          dom.navLinks.style.right = '20px';
+          dom.navLinks.style.background = 'rgba(0,0,0,0.8)';
+          dom.navLinks.style.padding = '20px';
+          dom.navLinks.style.borderRadius = '30px';
+          dom.navLinks.style.zIndex = '1000';
+        }
+      });
+
+      dom.navLinkItems.forEach(link => {
+        link.addEventListener('click', function(e) {
+          dom.navLinkItems.forEach(l => l.classList.remove('active-link'));
+          this.classList.add('active-link');
+          
+          if (window.innerWidth <= 800) {
+            dom.navLinks.style.display = '';
+          }
+          
+          const targetId = this.getAttribute('href');
+          if (targetId && targetId !== '#') {
+            e.preventDefault();
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        });
+      });
+
+      loadFromStorage();
+      renderDayChips();
+      renderWorkoutPanel();
+      updateProgressStats();
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 800) {
+          dom.navLinks.style.display = '';
+          dom.navLinks.style.flexDirection = '';
+          dom.navLinks.style.position = '';
+          dom.navLinks.style.background = '';
+          dom.navLinks.style.padding = '';
+          dom.navLinks.style.borderRadius = '';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
